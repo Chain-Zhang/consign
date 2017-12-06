@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index(){
-        $postList = Post::all();
+        $postList = Post::where('orderby','>',0)->orderby('orderby')->get();
         return response()->json($postList);
     }
 

@@ -1,5 +1,9 @@
 <template>
-    <i-switch v-model="switch1" @on-change="change"></i-switch>
+    <div>
+        <h2>
+            成都中伟轿车托运
+        </h2>
+    </div>
 </template>
 <script>
     export default {

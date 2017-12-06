@@ -26,7 +26,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Backs
 
     Route::get('/users', 'UserController@index');
     Route::post('/user_add', 'UserController@add');
+    Route::post('/reset_password', 'UserController@resetPassword');
     Route::get('/getEmplyee', 'UserController@getEmplyee');
+    Route::get('/get_permission', 'UserController@getPermission');
 
     Route::post('/transport_add', 'TransportController@add');
     Route::get('/transport_list', 'TransportController@getLists');

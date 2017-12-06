@@ -9,6 +9,7 @@ import PostList from '../pages/PostList.vue'
 import Home from '../pages/Home.vue'
 import TransportAdd from '../pages/TransportAdd.vue'
 import TransportList from '../pages/TransportList.vue'
+import ResetPassword from '../pages/ResetPassword.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
             path:'/user-list',
             name:'user-list',
             component:UserList
+        },
+        {
+            path:'/reset-password',
+            name:'reset-password',
+            component:ResetPassword
         },
         {
             path:'/transport-list',

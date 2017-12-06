@@ -57,34 +57,34 @@
                             <Icon type="android-car"></Icon>
                             轿运管理
                         </template>
-                        <MenuItem name="2-1">
+                        <MenuItem name="2-1" v-if="auth<5">
                             <router-link to="/transport-list" class="layout-text" tag="span">运输列表</router-link>
                         </MenuItem>
                         <MenuItem name="2-2">
                             <router-link to="/transport/add" class="layout-text" tag="span">新增运输</router-link>
                         </MenuItem>
                     </Submenu>
-                    <MenuItem name="3">
+                    <MenuItem name="3" v-if="auth<1">
                         <Icon type="social-buffer"></Icon>
                         <router-link to="/post" class="layout-text" tag="span">职务管理</router-link>
                     </MenuItem>
-                    <Submenu name="4">
+                    <Submenu name="4" v-if="auth<2">
                         <template slot="title">
-                            <Icon type="person"></Icon>
+                            <Icon type="ios-people"></Icon>
                             员工管理
                         </template>
                         <MenuItem name="4-1">
                             <router-link to="/user-list" class="layout-text" tag="span">员工列表</router-link>
                         </MenuItem>
-                        <MenuItem name="4-2">新增员工</MenuItem>
                     </Submenu>
-                    <Submenu name="4">
+                    <Submenu name="5">
                         <template slot="title">
-                            <Icon type="ios-analytics"></Icon>
-                            导航三
+                            <Icon type="person"></Icon>
+                            个人中心
                         </template>
-                        <MenuItem name="4-1">选项 1</MenuItem>
-                        <MenuItem name="4-2">选项 2</MenuItem>
+                        <MenuItem name="5-1">
+                            <router-link to="/reset-password" class="layout-text" tag="span">修改密码</router-link>
+                        </MenuItem>
                     </Submenu>
                 </Menu>
                 </Col>
@@ -100,8 +100,22 @@
         </div>
     </div>
 </template>
+
 <script>
     export default {
-
+        data:function () {
+            return{
+                auth:99
+            }
+        },
+        mounted:function () {
+             axios.get('/admin/get_permission')
+                     .then(response => {
+                        this.auth = response.data.orderby;
+                        console.log(response.data)
+             }).catch(err => {
+                 console.log(err);
+            })
+        }
     }
 </script>
