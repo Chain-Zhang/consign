@@ -36,6 +36,8 @@ class TransportController
         $payment_status = $request->input("payment_status",'');
         $salesman_id = $request->input("salesman_id",'');
         $is_transfer = $request->input("is_transfer",false);
+        $sendee_name = $request->input("sendee_name",'');
+        $sendee_phone = $request->input("sendee_phone",'');
 
         $transport = new Transport();
         $transport->car_model = $car_model;
@@ -44,6 +46,8 @@ class TransportController
         $transport->owner_phone = $owner_phone;
         $transport->from = $from;
         $transport->to = $to;
+        $transport->sendee_name = $sendee_name;
+        $transport->sendee_phone = $sendee_phone;
         $transport->charge = $charge;
         $transport->payment_method = $payment_method;
         $transport->payment_status = $payment_status;
@@ -122,6 +126,66 @@ class TransportController
             else{
                 $cr->status = 1;
                 $cr->message = '付款失败,请稍后再试';
+                return $cr->toJson();
+            }
+        }
+    }
+
+    public function updateCharge(Request $request){
+        $cr = new ConsignResult();
+        $id = $request->input('id', '');
+        $newCharge = $request->input('new_charge','');
+        if ($id != '') {
+            $transport = Transport::find($id);
+            $transport->charge = $newCharge;
+            if ($transport->save()){
+                $cr->status = 0;
+                $cr->message = '修改成功';
+                return $cr->toJson();
+            }
+            else{
+                $cr->status = 1;
+                $cr->message = '修改失败,请稍后再试';
+                return $cr->toJson();
+            }
+        }
+    }
+
+    public function updateStCharge(Request $request){
+        $cr = new ConsignResult();
+        $id = $request->input('id', '');
+        $newCharge = $request->input('new_charge','');
+        if ($id != '') {
+            $transport = Transport::find($id);
+            $transport->st_charge = $newCharge;
+            if ($transport->save()){
+                $cr->status = 0;
+                $cr->message = '修改成功';
+                return $cr->toJson();
+            }
+            else{
+                $cr->status = 1;
+                $cr->message = '修改失败,请稍后再试';
+                return $cr->toJson();
+            }
+        }
+    }
+
+    public function updateLtCharge(Request $request){
+        $cr = new ConsignResult();
+        $id = $request->input('id', '');
+        $newCharge = $request->input('new_charge','');
+        if ($id != '') {
+            $transport = Transport::find($id);
+            $transport->lt_charge = $newCharge;
+            if ($transport->save()){
+                $cr->status = 0;
+                $cr->message = '修改成功';
+                return $cr->toJson();
+            }
+            else{
+                $cr->status = 1;
+                $cr->message = '修改失败,请稍后再试';
                 return $cr->toJson();
             }
         }

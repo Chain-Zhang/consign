@@ -57,18 +57,18 @@
                             <Icon type="android-car"></Icon>
                             轿运管理
                         </template>
-                        <MenuItem name="2-1" v-if="auth<5">
+                        <MenuItem name="2-1" v-if="permission<5">
                             <router-link to="/transport-list" class="layout-text" tag="span">运输列表</router-link>
                         </MenuItem>
                         <MenuItem name="2-2">
                             <router-link to="/transport/add" class="layout-text" tag="span">新增运输</router-link>
                         </MenuItem>
                     </Submenu>
-                    <MenuItem name="3" v-if="auth<1">
+                    <MenuItem name="3" v-if="permission<1">
                         <Icon type="social-buffer"></Icon>
                         <router-link to="/post" class="layout-text" tag="span">职务管理</router-link>
                     </MenuItem>
-                    <Submenu name="4" v-if="auth<2">
+                    <Submenu name="4" v-if="permission<2">
                         <template slot="title">
                             <Icon type="ios-people"></Icon>
                             员工管理
@@ -102,17 +102,26 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         data:function () {
             return{
                 auth:99
             }
         },
+        methods:{
+            setPermission:function (permission) {
+                this.$store.commit('setPermission',permission)
+            }
+        },
+        computed:{
+            ...mapState(['permission'])
+        },
         mounted:function () {
              axios.get('/admin/get_permission')
                      .then(response => {
                         this.auth = response.data.orderby;
-                        console.log(response.data)
+                        this.setPermission(response.data.orderby);
              }).catch(err => {
                  console.log(err);
             })

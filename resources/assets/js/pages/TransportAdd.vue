@@ -41,6 +41,19 @@
 
         <Row>
             <Col span="12">
+            <FormItem label="接车人称呼" prop="sendee_name">
+                <Input v-model="formItem.sendee_name" placeholder="请输入"></Input>
+            </FormItem>
+            </Col>
+            <Col span="12">
+            <FormItem label="接车人电话" prop="sendee_phone">
+                <Input v-model="formItem.sendee_phone" placeholder="请输入"></Input>
+            </FormItem>
+            </Col>
+        </Row>
+
+        <Row>
+            <Col span="12">
             <FormItem label="总收费" prop="charge">
                 <Input v-model="formItem.charge" placeholder="请输入"></Input>
             </FormItem>
@@ -121,7 +134,9 @@
                     payment_method:'',
                     payment_status:'',
                     salesman:'',
-                    is_transfer : false
+                    is_transfer : false,
+                    sendee_name:'',
+                    sendee_phone:''
                 },
                 ruleValidate: {
                     car_model: [
@@ -154,6 +169,12 @@
                     salesman:[
 //                        {required:true, message:'业务员不能为空',trgger:'blur'}
                     ],
+                    sendee_name:[
+                        {required:true, message:'接车人称呼必须输入', trgger:'blur'}
+                    ],
+                    sendee_phone:[
+                        {required:true, message:'接车人电话必须输入', trgger:'blur'}
+                    ],
                 },
                 users:[]
             }
@@ -177,6 +198,8 @@
                             payment_status:this.formItem.payment_status,
                             salesman_id:this.formItem.salesman,
                             is_transfer:this.formItem.is_transfer,
+                            sendee_name : this.formItem.sendee_name,
+                            sendee_phone : this.formItem.sendee_phone
                         }).then(response => {
                             if(response.data.status == 0){
                             this.$Message.info(response.data.message);

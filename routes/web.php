@@ -34,4 +34,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Backs
     Route::get('/transport_list', 'TransportController@getLists');
     Route::get('/transport_get', 'TransportController@get');
     Route::post('/transport_pay', 'TransportController@payment');
+    Route::post('/update_charge', 'TransportController@updateCharge');
+    Route::post('/update_st_charge', 'TransportController@updateStCharge');
+    Route::post('/update_lt_charge', 'TransportController@updateLtCharge');
 });
