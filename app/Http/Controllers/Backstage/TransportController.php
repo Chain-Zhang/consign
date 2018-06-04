@@ -15,6 +15,7 @@ use App\User;
 use App\Utility\OrderNoHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TransportController
@@ -75,17 +76,30 @@ class TransportController
     public function getLists(Request $request){
         $payment_status = $request->input('payment_status','');
         $vin_no = $request->input('vin_no','');
+        $from = $request->input('from','');
+        $to = $request->input('to','');
+        $owner = $request->input('owner','');
+        $startStr = $request->input('start', '');
+        $endStr = $request->input('end', '');
 
-
+        $transports = Transport::where('id', '>', 0);
         if ($vin_no != ''){
-            Log::info($vin_no);
-            $transports = Transport::where('vin_no', $vin_no)->orderBy('id','desc')->paginate(10);
+            $transports = $transports->where('vin_no', $vin_no);
         }
-        else if($payment_status != '' && $payment_status != '-1'){
-            $transports = Transport::where('payment_status', $payment_status)->orderBy('id','desc')->paginate(10);
-        }else{
-            $transports = Transport::orderBy('id','desc')->paginate(10);
+        if($payment_status != '' && $payment_status != '-1'){
+            $transports = $transports->where('payment_status', $payment_status);
         }
+        if($from != '') {
+            $transports = $transports->where('from', 'like', '%'.$from.'%');
+        }
+        if($to != '') {
+            $transports = $transports->where('to', 'like', '%'.$to.'%');
+        }
+        if($owner != '') {
+            $transports = $transports->where('owner', 'like', '%'.$owner.'%');
+        }
+
+        $transports = $transports->orderBy('id','desc')->paginate(10);
 
         foreach ($transports as $transport){
             $transport->payment_status_desc = $transport->getPaymentStatus();

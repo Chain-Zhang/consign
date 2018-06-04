@@ -2,19 +2,42 @@
     <div>
         <div>
             <Row>
-                <Col span="12">
+                <Col span="6">
                     <Input v-model="vin_no" placeholder="请输入车架号">
                     <span slot="prepend">车架号:</span>
-                    <Button slot="append" icon="ios-search" @click="vin_no_search"></Button>
+                    <!--<Button slot="append" icon="ios-search" @click="vin_no_search"></Button>-->
                     </Input>
                 </Col>
-                <Col span="12">
-                    <Select v-model="payment_status" style="width:200px" placeholder="请选择付款状态"
-                    @on-change="peyment_status_chenged">
-                        <Option value="-1" key="">全部</Option>
-                        <Option value="0" key="0">未付款</Option>
-                        <Option value="1" key="1">已付款</Option>
-                    </Select>
+                <Col span="6">
+                    <Input v-model="owner" placeholder="请输入客户来源">
+                    <span slot="prepend">客户来源:</span>
+                    </Input>
+                </Col>
+                <Col span="6">
+                    <Input v-model="from" placeholder="请输入始发地">
+                        <span slot="prepend">始发地:</span>
+                    </Input>
+                </Col>
+                <Col span="6">
+                    <Input v-model="to" placeholder="请输入目的地">
+                        <span slot="prepend">目的地:</span>
+                    </Input>
+                </Col>
+
+            </Row>
+            <Row>
+                <Col span="6">
+                <Select v-model="payment_status" style="width:200px" placeholder="请选择付款状态">
+                    <Option value="-1" key="">全部</Option>
+                    <Option value="0" key="0">未付款</Option>
+                    <Option value="1" key="1">已付款</Option>
+                </Select>
+                </Col>
+                <!--<Col span="6">-->
+                <!--<DatePicker v-model="daterange" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>-->
+                <!--</Col>-->
+                <Col span="6">
+                    <Button type="primary" shape="circle" icon="ios-search" @click="search">查询</Button>
                 </Col>
             </Row>
         </div>
@@ -28,7 +51,7 @@
         <Modal
                 width="800"
                 v-model="isDetail"
-                title="Title"
+                title="订单详情"
                 @on-cancel="close">
             <transport-view :tpid="detailIndex"></transport-view>
             <div slot="footer"></div>
@@ -51,6 +74,10 @@
                         key: 'order_id'
                     },
                     {
+                        title: '订单日期',
+                        key: 'ordered_date'
+                    },
+                    {
                         title: '车型',
                         key: 'car_model'
                     },
@@ -59,7 +86,7 @@
                         key: 'vin_no'
                     },
                     {
-                        title: '出车方',
+                        title: '客户来源',
                         key: 'owner'
                     },
                     {
@@ -105,38 +132,34 @@
                 data1: [],
                 vin_no:'',
                 payment_status:'',
+                from:'',
+                to:'',
+                owner:'',
+                daterange:[],
                 totalCount:0,
                 currentPage:1,
-                 isDetail : false,
+                isDetail : false,
                 detailIndex:-1
             }
         },
         methods:{
-            vin_no_search:function () {
+            search:function () {
+                console.log(this.daterange)
+                console.log(this.daterange[0])
+                console.log(this.daterange[1])
                 this.currentPage = 1;
-                this.payment_status = '';
-                var url = '/admin/transport_list?vin_no=' + this.vin_no;
-                this.getData(url);
+                this.getData();
             },
             changePage:function (current) {
-                var url = '/admin/transport_list?page=' + current + '&vin_no=' + this.vin_no + '&payment_status=' + this.payment_status;
-                this.getData(url);
+                this.currentPage = current;
+                //var url = '/admin/transport_list?page=' + current + '&vin_no=' + this.vin_no + '&payment_status=' + this.payment_status;
+                this.getData();
             },
-            peyment_status_chenged:function (val) {
-                if (val == '-1') {
-                    this.vin_no = '';
-                    this.currentPage = 1;
-                    var url = '/admin/transport_list';
-                    this.getData(url);
-                }
-                if(val == '0' || val == 1){
-                    this.vin_no = '';
-                    this.currentPage = 1;
-                    var url = '/admin/transport_list?payment_status=' + val;
-                    this.getData(url);
-                }
-            },
-            getData:function (url) {
+            getData:function () {
+                let url = '/admin/transport_list?page=' + this.currentPage + '&payment_status='+this.payment_status +
+                        '&vin_no='+ this.vin_no + '&from=' + this.from + '&to=' + this.to +'&owner=' + this.owner
+                        //'&start=' + this.daterange[0] + '&end=' + this.daterang[1]
+                console.log('url: ' + url)
                 axios.get(url)
                         .then(response => {
                             this.data1 = response.data.data;

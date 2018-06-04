@@ -8,7 +8,7 @@
         </Col>
         <Col span="12">
         <FormItem label="下单时间">
-            <DatePicker :value="formItem.ordered_date" format="yyyy-MM-dd hh:mm" type="date" disabled></DatePicker>
+            <DatePicker :value="formItem.ordered_date" format="yyyy-MM-dd HH:mm" type="date" disabled></DatePicker>
         </FormItem>
         </Col>
     </Row>
